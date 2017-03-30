@@ -1,0 +1,36 @@
+%% This script reads saves all the information in MatLab variables for future use.
+
+
+file = fopen('./UCI_HAR_Dataset/train/X_train.txt', 'r');
+
+X_train = [];
+row = 1;
+
+while ~feof(file)
+    line = str2num(fgetl(file));
+    for column = 1:561
+        X_test(row, column) = line(column);
+    end
+    row = row + 1;
+end
+
+fclose(file);
+
+file = fopen('./UCI_HAR_Dataset/test/X_test.txt', 'r');
+
+X_test = [];
+row = 1;
+
+while ~feof(file)
+    line = str2num(fgetl(file));
+    for column = 1:561
+        X_test(row, column) = line(column);
+    end
+    row = row + 1;
+end
+
+fclose(file);
+
+
+
+clear i j r req endpoint end_cache header file ans;
