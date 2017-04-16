@@ -52,8 +52,7 @@ file = fopen('./UCI_HAR_Dataset/test/X_test.txt', 'r');
 X_test = [];
 row = 1;
 while ~feof(file)
-    line = fgetl(file)
-    line
+    line = fgetl(file);
     for column = 1:n_features
         X_test(row, column) = line(column);
     end
@@ -72,3 +71,71 @@ end
 fclose(file);
 
 clear column file line row ans;
+
+
+%% 
+% all=[X_train;X_test];
+% [COEFF, SCORE, LATENT] = pca(all);
+% SCORE_TRAIN=SCORE(1:7352,:);
+% SCORE_TEST=SCORE(7353:end,:);
+%1,2,3 walking
+%4,5,6 
+[COEFF_TRAIN, SCORE_TRAIN, LATENT_TRAIN] = pca(X_train);
+[COEFF_TEST, SCORE_TEST, LATENT_TEST] = pca(X_test);
+
+%distancia à média
+m_walking=[];
+m_not_walking=[];
+
+for i=1:7352
+    if y_train(i)==1 || y_train(i)==2 || y_train(i)== 3
+        m_walking=[m_walking; SCORE_TRAIN(i,1:3)];
+    else
+        m_not_walking=[m_not_walking; SCORE_TRAIN(i,1:3)];
+    end
+    
+end
+
+w_mean1=mean(m_walking(:,1));
+w_mean2=mean(m_walking(:,2));
+w_mean3=mean(m_walking(:,3));
+
+nw_mean1=mean(m_not_walking(:,1));
+nw_mean2=mean(m_not_walking(:,2));
+nw_mean3=mean(m_not_walking(:,3));
+
+%% test
+%1 walking
+%2 not walking
+test_result=[];
+matrix=[0 0; 0 0];
+
+for i=1:2947
+    dist_w=sqrt((w_mean1-SCORE_TEST(i,1))^2+(w_mean2-SCORE_TEST(i,2))^2+(w_mean3-SCORE_TEST(i,3))^2);
+    
+    dist_n_w=sqrt((nw_mean1-SCORE_TEST(i,1))^2+(nw_mean2-SCORE_TEST(i,2))^2+(nw_mean3-SCORE_TEST(i,3))^2);
+    
+      
+    if dist_w<dist_n_w
+        test_result=[test_result 1];
+    else
+        test_result=[test_result 2];
+    end
+   
+end
+
+ for k=1:2947
+     if test_result(k)==1 && (y_test(k)==1 || y_test(k)==2 || y_test(k)==3)
+         matrix(1,1)=matrix(1,1)+1;
+     elseif test_result(k)==2 && (y_test(k)==4 || y_test(k)==5 || y_test(k)==6)
+         matrix(2,2)=matrix(2,2)+1;
+     elseif test_result(k)==1 && (y_test(k)==4 || y_test(k)==5 || y_test(k)==6)
+         matrix(2,1)=matrix(2,1)+1;
+     elseif test_result(k)==2 && (y_test(k)==1 || y_test(k)==2 || y_test(k)==3)
+         matrix(1,2)=matrix(1,2)+1;
+     end
+ end
+
+
+
+
