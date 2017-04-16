@@ -221,3 +221,99 @@ end
      end
  end
 
+ %% 6 classes
+ 
+%distancia à média
+m_1=[];
+m_2=[];
+m_3=[];
+m_4=[];
+m_5=[];
+m_6=[];
+
+for i=1:7352
+    if y_train(i)==1 
+        m_1=[m_1; SCORE_TRAIN(i,1:3)];
+    elseif y_train(i)==2 
+        m_2=[m_2; SCORE_TRAIN(i,1:3)];
+    elseif y_train(i)==3
+        m_3=[m_3; SCORE_TRAIN(i,1:3)];
+    elseif y_train(i)==4
+        m_4=[m_4; SCORE_TRAIN(i,1:3)];
+    elseif y_train(i)==5
+        m_5=[m_5; SCORE_TRAIN(i,1:3)];
+    elseif y_train(i)==6
+        m_6=[m_6; SCORE_TRAIN(i,1:3)];   
+    end
+ 
+end
+
+
+c1_mean1=mean(m_1(:,1));
+c1_mean2=mean(m_1(:,2));
+c1_mean3=mean(m_1(:,3));
+c2_mean1=mean(m_2(:,1));
+c2_mean2=mean(m_2(:,2));
+c2_mean3=mean(m_3(:,3));
+c3_mean1=mean(m_3(:,1));
+c3_mean2=mean(m_3(:,2));
+c3_mean3=mean(m_3(:,3));
+c4_mean1=mean(m_4(:,1));
+c4_mean2=mean(m_4(:,2));
+c4_mean3=mean(m_4(:,3));
+c5_mean1=mean(m_5(:,1));
+c5_mean2=mean(m_5(:,2));
+c5_mean3=mean(m_5(:,3));
+c6_mean1=mean(m_6(:,1));
+c6_mean2=mean(m_6(:,2));
+c6_mean3=mean(m_6(:,3));
+
+
+
+%% test
+%1 walking
+%2 not walking
+test_result6=[];
+matrix6=zeros(6);
+
+for i=1:2947
+    dist_c1=sqrt((c1_mean1-SCORE_TEST(i,1))^2+(c1_mean2-SCORE_TEST(i,2))^2+(c1_mean3-SCORE_TEST(i,3))^2);
+    dist_c2=sqrt((c2_mean1-SCORE_TEST(i,1))^2+(c2_mean2-SCORE_TEST(i,2))^2+(c2_mean3-SCORE_TEST(i,3))^2);
+    dist_c3=sqrt((c3_mean1-SCORE_TEST(i,1))^2+(c3_mean2-SCORE_TEST(i,2))^2+(c3_mean3-SCORE_TEST(i,3))^2);
+    dist_c4=sqrt((c4_mean1-SCORE_TEST(i,1))^2+(c4_mean2-SCORE_TEST(i,2))^2+(c4_mean3-SCORE_TEST(i,3))^2);
+    dist_c5=sqrt((c5_mean1-SCORE_TEST(i,1))^2+(c5_mean2-SCORE_TEST(i,2))^2+(c5_mean3-SCORE_TEST(i,3))^2);
+    dist_c6=sqrt((c6_mean1-SCORE_TEST(i,1))^2+(c6_mean2-SCORE_TEST(i,2))^2+(c6_mean3-SCORE_TEST(i,3))^2);   
+    
+    [dist_min,I]=min([dist_c1,dist_c2,dist_c3,dist_c4,dist_c5,dist_c6]);
+    
+    if I==1
+        test_result6=[test_result6 1];
+    elseif I==2
+        test_result6=[test_result6 2];
+    elseif I==3
+        test_result6=[test_result6 3];
+    elseif I==4
+        test_result6=[test_result6 4];
+    elseif I==5
+        test_result6=[test_result6 5];
+    elseif I==6
+        test_result6=[test_result6 6];
+    end
+   
+end
+
+ for k=1:2947
+     if test_result6(k)==1 && y_test(k)==1 
+         matrix6(1,1)=matrix6(1,1)+1;
+     elseif test_result6(k)==2 && y_test(k)==2
+         matrix6(2,2)=matrix6(2,2)+1;
+     elseif test_result6(k)==3 && y_test(k)==3
+         matrix6(3,3)=matrix6(3,3)+1;
+     elseif test_result6(k)==4 && y_test(k)==4
+         matrix6(4,4)=matrix6(4,4)+1;
+     elseif test_result6(k)==5 && y_test(k)==5
+         matrix6(5,5)=matrix6(5,5)+1;
+     elseif test_result6(k)==6 && y_test(k)==6
+         matrix6(6,6)=matrix6(6,6)+1;
+     end
+ end
