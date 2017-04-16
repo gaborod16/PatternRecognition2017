@@ -52,7 +52,7 @@ file = fopen('./UCI_HAR_Dataset/test/X_test.txt', 'r');
 X_test = [];
 row = 1;
 while ~feof(file)
-    line = fgetl(file);
+    line = str2num(fgetl(file));
     for column = 1:n_features
         X_test(row, column) = line(column);
     end
@@ -176,7 +176,7 @@ m_walking=[];
 m_not_walking=[];
 
 for i=1:7352
-    if y_train(i)==1 || y_train(i)==2 || y_train(i)== 3
+    if y_train2(i)==1 
         m_walking=[m_walking; selected_features_train(i,1:3)];
     else
         m_not_walking=[m_not_walking; selected_features_train(i,1:3)];
