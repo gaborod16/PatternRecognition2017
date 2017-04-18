@@ -1,0 +1,118 @@
+%% Kruskal Wallis method for the binary scenario.
+
+% y_train2=[];
+% for i=1:n_train_samples
+%     if y_train(i)==1 || y_train(i)==2 || y_train(i)== 3
+%         y_train2=[y_train2 1];
+%     else
+%        y_train2=[y_train2 2];
+%     end
+%     
+% end
+
+
+rank=cell(meta.n_features,2);
+
+for i=1:meta.n_features
+    [p,atab,stats] = kruskalwallis(data.X_train(:,i),data.y_train_bin,'off');
+    rank{i,1}=meta.features{i};
+    rank{i,2}=atab{2,5};
+    
+end
+
+[~,I]=sort([rank{:,2}],2,'descend');
+stotal=[sprintf('K-W Feature ranking: \n')];
+for i=1:meta.n_features
+    stotal= [stotal, sprintf('%s --> %.2f\n', rank{I(i),1}, rank{I(i),2})];
+end
+
+% stotal % Shows all the ranking
+
+kw_bin = struct();
+kw_bin.n_wanted_features = 3;
+kw_bin.X_train = [];
+kw_bin.X_test = [];
+sfeat = [sprintf('Top %d features \t\t\t\t\t\tIndex\n',kw_bin.n_wanted_features)];
+sfeat = [sfeat, sprintf('----------------------------\t\t------\n')];
+for i=1:kw_bin.n_wanted_features
+    kw_bin.X_train = [kw_bin.X_train, data.X_train(:,I(i))];
+    kw_bin.X_test = [kw_bin.X_test, data.X_test(:,I(i))];
+    sfeat = [sfeat, sprintf('%s\t\t\t%d\n', rank{I(i),1}, I(i))];
+end
+
+sfeat % Shows the top 'n_wanted_features'
+
+% Top 3 features                         Index
+% -----------------------------          --------
+% fBodyAccJerk-entropy()-X               1 ?!?!
+% fBodyBodyAccJerkMag-entropy()          235 ?!?!
+% fBodyAccJerk-entropy()-Y               104 !??!
+
+% selected_features_train=[data.X_train(:,1), data.X_train(:,235), data.X_train(:,104)]; 
+% selected_features_test=[data.X_test(:,1), data.X_test(:,235), data.X_test(:,104)];
+
+clear stotal sfeat i rank p atab stats I;
+
+%% Principal component analysis method for ???
+
+% all=[X_train;X_test];
+% [COEFF, SCORE, LATENT] = pca(all);
+% SCORE_TRAIN=SCORE(1:7352,:);
+% SCORE_TEST=SCORE(7353:end,:);
+%1,2,3 walking
+%4,5,6 
+[COEFF_TRAIN, SCORE_TRAIN, LATENT_TRAIN] = pca(X_train);
+[COEFF_TEST, SCORE_TEST, LATENT_TEST] = pca(X_test);
+
+%distancia à média
+m_walking=[];
+m_not_walking=[];
+
+for i=1:meta.n_train_samples
+    if y_train(i)==1 || y_train(i)==2 || y_train(i)== 3
+        m_walking=[m_walking; SCORE_TRAIN(i,1:3)];
+    else
+        m_not_walking=[m_not_walking; SCORE_TRAIN(i,1:3)];
+    end
+    
+end
+
+w_mean1=mean(m_walking(:,1));
+w_mean2=mean(m_walking(:,2));
+w_mean3=mean(m_walking(:,3));
+
+nw_mean1=mean(m_not_walking(:,1));
+nw_mean2=mean(m_not_walking(:,2));
+nw_mean3=mean(m_not_walking(:,3));
+
+% -- Test -- %
+%1 walking
+%0 not walking
+test_result=[];
+conf_matrix=[0 0; 0 0];
+
+for i=1:n_test_samples
+    dist_w=sqrt((w_mean1-SCORE_TEST(i,1))^2+(w_mean2-SCORE_TEST(i,2))^2+(w_mean3-SCORE_TEST(i,3))^2);
+    
+    dist_n_w=sqrt((nw_mean1-SCORE_TEST(i,1))^2+(nw_mean2-SCORE_TEST(i,2))^2+(nw_mean3-SCORE_TEST(i,3))^2);
+    
+      
+    if dist_w<dist_n_w
+        test_result=[test_result 1];
+    else
+        test_result=[test_result 2];
+    end
+   
+end
+
+ for k=1:meta.n_test_samples
+     if test_result(k)==1 && data.y_test_bin(k)==1
+         conf_matrix(1,1)=conf_matrix(1,1)+1;
+     elseif test_result(k)==0 && data.y_test_bin(k)==0
+         conf_matrix(2,2)=conf_matrix(2,2)+1;
+     elseif test_result(k)==1 && data.y_test_bin(k)==0
+         conf_matrix(2,1)=conf_matrix(2,1)+1;
+     elseif test_result(k)==0 && data.y_test_bin(k)==1
+         conf_matrix(1,2)=conf_matrix(1,2)+1;
+     end
+ end
