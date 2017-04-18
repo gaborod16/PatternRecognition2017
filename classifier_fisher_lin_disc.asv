@@ -1,0 +1,11 @@
+%% Fisher linear discriminant for the binary scenario
+%  Using kruskal wallis features.
+
+trn = kw_bin.X_train; % load training data 
+model = fldqp(trn); % compute FLD 
+figure; ppatterns(trn); pline(model); 
+
+% plot data and solution 
+tst = kw_bin.X_test; % load testing data 
+ypred = linclass(tst.X,model); % classify testing data 
+cerror(ypred,tst.y)

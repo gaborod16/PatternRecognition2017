@@ -17,15 +17,15 @@ end
 
 % stotal % Shows all the ranking
 
-kw_bin = struct();
-kw_bin.n_wanted_features = 3;
-kw_bin.X_train = [];
-kw_bin.X_test = [];
-sfeat = [sprintf('Top %d features \t\t\t\t\t\tIndex\n',kw_bin.n_wanted_features)];
+kw_bin_f = struct();
+kw_bin_f.n_features = 3;
+kw_bin_f.X_train = [];
+kw_bin_f.X_test = [];
+sfeat = [sprintf('Top %d features \t\t\t\t\t\tIndex\n',kw_bin_f.n_features)];
 sfeat = [sfeat, sprintf('----------------------------\t\t------\n')];
-for i=1:kw_bin.n_wanted_features
-    kw_bin.X_train = [kw_bin.X_train, data.X_train(:,I(i))];
-    kw_bin.X_test = [kw_bin.X_test, data.X_test(:,I(i))];
+for i=1:kw_bin_f.n_features
+    kw_bin_f.X_train = [kw_bin_f.X_train, data.X_train(:,I(i))];
+    kw_bin_f.X_test = [kw_bin_f.X_test, data.X_test(:,I(i))];
     sfeat = [sfeat, sprintf('%s\t\t\t%d\n', rank{I(i),1}, I(i))];
 end
 
@@ -56,9 +56,59 @@ clear stotal sfeat i rank p atab stats I;
 
 %% Principal component analysis method for both scenarios
 
+n_features = 3;
 in_data.X = data.X_train';
-in_data.y = data.y_train_bin';
-model = pca(data.X_train', 3);
+in_test_data.X = data.X_test';
+model = pca(in_data.X, n_features);
+
+% Binary scenario
+in_data.y = data.y_train_bin;
+in_test_data.y = data.y_test_bin;
+out_data = linproj(in_data,model);
+out_test_data = linproj(in_test_data,model);
+
+pca_bin_f.X_train = out_data.X';
+pca_bin_f.X_test = out_test_data.X';
+pca_bin_f.n_features = n_features;
+
+figure; 
+ppatterns(out_data);
+figure;
+ppatterns(out_test_data);
+
+% Multiclass scenario
+in_data.y = data.y_train;
+in_test_data.y = data.y_test;
+out_data = linproj(in_data,model);
+out_test_data = linproj(in_test_data,model);
+
+pca_f.X_train = out_data.X';
+pca_f.X_test = out_test_data.X';
+pca_f.n_features = n_features;
+
+figure; 
+ppatterns(out_data);
+figure; 
+ppatterns(out_test_data);
+
+clear in_data in_test_data model n_features out_data out_test_data;
+
+%% Linear discriminant analysis method for the binary scenario
+
+in_data.X = data.X_train';
+in_data.y = data.y_train_bin;
+model = lda(in_data, 3);
+
+out_data = linproj(in_data,model);
+figure; 
+ppatterns(out_data);
+
+%% Linear discriminant analysis method for the multiclass scenario
+
+in_data.X = data.X_train';
+in_data.y = data.y_train;
+model = lda(in_data, 3);
+
 out_data = linproj(in_data,model);
 figure; 
 ppatterns(out_data);
