@@ -35,7 +35,7 @@ for i=1:meta.n_test_samples
     if dist_w < dist_n_w
         test_result=[test_result 1];
     else
-        test_result=[test_result 0];
+        test_result=[test_result 2];
     end
    
 end
@@ -46,11 +46,11 @@ conf_matrix=[0 0; 0 0];
 for k=1:meta.n_test_samples
     if test_result(k)==1 && data.y_test_bin(k)==1
         conf_matrix(1,1)=conf_matrix(1,1)+1;
-    elseif test_result(k)==0 && data.y_test_bin(k)==0
+    elseif test_result(k)==2 && data.y_test_bin(k)==2
         conf_matrix(2,2)=conf_matrix(2,2)+1;
-    elseif test_result(k)==1 && data.y_test_bin(k)==0
+    elseif test_result(k)==1 && data.y_test_bin(k)==2
         conf_matrix(2,1)=conf_matrix(2,1)+1;
-    elseif test_result(k)==0 && data.y_test_bin(k)==1
+    elseif test_result(k)==2 && data.y_test_bin(k)==1
         conf_matrix(1,2)=conf_matrix(1,2)+1;
     end
 end
@@ -100,7 +100,7 @@ for i=1:meta.n_test_samples
     if dist_w < dist_n_w
         test_result=[test_result 1];
     else
-        test_result=[test_result 0];
+        test_result=[test_result 2];
     end
    
 end
@@ -111,11 +111,11 @@ conf_matrix=[0 0; 0 0];
 for k=1:meta.n_test_samples
     if test_result(k)==1 && data.y_test_bin(k)==1
         conf_matrix(1,1)=conf_matrix(1,1)+1;
-    elseif test_result(k)==0 && data.y_test_bin(k)==0
+    elseif test_result(k)==2 && data.y_test_bin(k)==2
         conf_matrix(2,2)=conf_matrix(2,2)+1;
-    elseif test_result(k)==1 && data.y_test_bin(k)==0
+    elseif test_result(k)==1 && data.y_test_bin(k)==2
         conf_matrix(2,1)=conf_matrix(2,1)+1;
-    elseif test_result(k)==0 && data.y_test_bin(k)==1
+    elseif test_result(k)==2 && data.y_test_bin(k)==1
         conf_matrix(1,2)=conf_matrix(1,2)+1;
     end
 end

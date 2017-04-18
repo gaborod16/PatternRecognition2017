@@ -28,6 +28,8 @@ kw_bin_f = struct();
 kw_bin_f.n_features = 3;
 kw_bin_f.X_train = [];
 kw_bin_f.X_test = [];
+kw_bin_f.y_train = data.y_train_bin;
+kw_bin_f.y_test = data.y_test_bin;
 sfeat = [sprintf('Top %d features \t\t\t\t\t\tIndex\n',kw_bin_f.n_features)];
 sfeat = [sfeat, sprintf('----------------------------\t\t------\n')];
 for i=1:kw_bin_f.n_features
@@ -56,6 +58,8 @@ out_test_data = linproj(in_test_data,model);
 
 pca_bin_f.X_train = out_data.X';
 pca_bin_f.X_test = out_test_data.X';
+pca_bin_f.y_train = in_data.y;
+pca_bin_f.y_test = in_test_data.y;
 pca_bin_f.n_features = n_features;
 
 figure; 
@@ -71,6 +75,8 @@ out_test_data = linproj(in_test_data,model);
 
 pca_f.X_train = out_data.X';
 pca_f.X_test = out_test_data.X';
+pca_f.y_train = in_data.y;
+pca_f.y_test = in_test_data.y;
 pca_f.n_features = n_features;
 
 figure; 

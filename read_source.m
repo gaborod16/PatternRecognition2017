@@ -51,7 +51,9 @@ end
 fclose(file);
 
 meta.n_train_samples = size(data.y_train, 2);
-data.y_train_bin = +(data.y_train <= 3);
+% y_test > 3 => not walking => walking = 0 and not walking = 1
+% That + 1 = walking = 1 and not walking = 2. 
+data.y_train_bin = 1 + (data.y_train > 3);
 
 % X TEST READ
 file = fopen('./UCI_HAR_Dataset/test/X_test.txt', 'r');
@@ -77,6 +79,8 @@ end
 fclose(file);
 
 meta.n_test_samples = size(data.y_test, 2);
-data.y_test_bin = +(data.y_test <= 3);
+% y_test > 3 => not walking => walking = 0 and not walking = 1
+% That + 1 = walking = 1 and not walking = 2. 
+data.y_test_bin = 1 + (data.y_test > 3);
 
 clear column file line row ans;

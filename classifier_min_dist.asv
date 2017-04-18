@@ -100,7 +100,7 @@ for i=1:meta.n_test_samples
     if dist_w < dist_n_w
         test_result=[test_result 1];
     else
-        test_result=[test_result 0];
+        test_result=[test_result 2];
     end
    
 end
@@ -208,4 +208,4 @@ for i=1:meta.n_test_samples
 end
 
 matrix6 = confusionmat(data.y_test,test_result6)
-sprintf('accuracy = %.4f',(sum(diag(matrix6)) / sum(sum(matrix)))
+sprintf('accuracy multiclass = %.4f',(sum(diag(matrix6)) / sum(sum(matrix6))))
