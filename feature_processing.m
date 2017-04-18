@@ -1,3 +1,10 @@
+%% Scaling
+
+for i=1:561
+    data.X_train(:,i) =-1 + 2.* (data.X_train(:,i)-min(data.X_train(:,i))) ./ (max(data.X_train(:,i)-min(data.X_train(:,i))));
+    data.X_test(:,i) = -1 + 2.*(data.X_test(:,i)-min(data.X_test(:,i))) ./ (max(data.X_test(:,i)-min(data.X_test(:,i))));
+end
+
 %% Kruskal Wallis method for the binary scenario.
 
 rank=cell(meta.n_features,2);
@@ -31,28 +38,8 @@ end
 
 sfeat % Shows the top 'n_wanted_features'
 
-% Top 3 features                         Index
-% -----------------------------          --------
-% fBodyAccJerk-entropy()-X               1 ?!?!
-% fBodyBodyAccJerkMag-entropy()          235 ?!?!
-% fBodyAccJerk-entropy()-Y               104 !??!
-
-% selected_features_train=[data.X_train(:,1), data.X_train(:,235), data.X_train(:,104)]; 
-% selected_features_test=[data.X_test(:,1), data.X_test(:,235), data.X_test(:,104)];
-
 clear stotal sfeat i rank p atab stats I;
 
-%% Principal component analysis method for both scenario
-
-% all=[X_train;X_test];
-% [COEFF, SCORE, LATENT] = pca(all);
-% SCORE_TRAIN=SCORE(1:7352,:);
-% SCORE_TEST=SCORE(7353:end,:);
-%1,2,3 walking
-%4,5,6 not walking
-
-[COEFF_TRAIN, SCORE_TRAIN, LATENT_TRAIN] = pca(data.X_train);
-[COEFF_TEST, SCORE_TEST, LATENT_TEST] = pca(data.X_test);
 
 %% Principal component analysis method for both scenarios
 

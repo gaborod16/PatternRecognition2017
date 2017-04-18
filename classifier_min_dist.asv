@@ -208,4 +208,4 @@ for i=1:meta.n_test_samples
 end
 
 matrix6 = confusionmat(data.y_test,test_result6)
-sprintf('accuracy multiclass = %.4f',(sum(diag(matrix6)) / sum(sum(matrix6))))
+sprintf('accuracy = %.4f',(sum(diag(matrix6)) / sum(sum(matrix)))
