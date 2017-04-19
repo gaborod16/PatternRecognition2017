@@ -31,7 +31,7 @@ test_result=[];
 for i=1:meta.n_test_samples
     dist_w=sqrt((w_mean1-kw_bin_f.X_test(i,1))^2+(w_mean2-kw_bin_f.X_test(i,2))^2+(w_mean3-kw_bin_f.X_test(i,3))^2);
     dist_n_w=sqrt((nw_mean1-kw_bin_f.X_test(i,1))^2+(nw_mean2-kw_bin_f.X_test(i,1))^2+(nw_mean3-kw_bin_f.X_test(i,1))^2);
-
+    
     if dist_w < dist_n_w
         test_result=[test_result 1];
     else
@@ -162,7 +162,7 @@ c1_mean2=mean(m_1(:,2));
 c1_mean3=mean(m_1(:,3));
 c2_mean1=mean(m_2(:,1));
 c2_mean2=mean(m_2(:,2));
-c2_mean3=mean(m_3(:,3));
+c2_mean3=mean(m_2(:,3));
 c3_mean1=mean(m_3(:,1));
 c3_mean2=mean(m_3(:,2));
 c3_mean3=mean(m_3(:,3));
@@ -206,6 +206,8 @@ for i=1:meta.n_test_samples
     end
    
 end
+
+dist_c2
 
 matrix6 = confusionmat(data.y_test,test_result6)
 sprintf('accuracy multiclass = %.4f',(sum(diag(matrix6)) / sum(sum(matrix6))))
