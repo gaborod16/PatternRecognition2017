@@ -1,0 +1,19 @@
+%% Binary classification KW + FisherLD
+load read_source.mat
+FeatureProcess.KruskalWallis(data,meta)
+
+%% Binary classification KW + MinDistEuc
+
+%% Binary classification KW + MinDistMah
+
+%% Binary classification PCA + FisherLD
+
+%% Binary classification PCA + MinDistEuc
+
+%% Binary classification PCA + MinDistMah
+
+%% Binary classification LDA + FisherLD
+
+%% Binary classification LDA + MinDistEuc
+
+%% Binary classification LDA + MinDistMah

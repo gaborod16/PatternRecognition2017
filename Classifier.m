@@ -15,21 +15,23 @@ classdef Classifier
         function [output] = FisherLD_bin(feat_data)
             trn = struct();
             trn.X = feat_data.X_train'; % load training data
-            trn.y = feat_data.y_train_bin;
+            trn.y = feat_data.y_train;
 
             [trn.dim, trn.num_data] = size(trn.X);
             trn.name = 'FLD';
             model = fld(trn); % compute FLD 
             figure; ppatterns(trn); pline(model); 
+            model
 
             % plot data and solution 
             tst.X = feat_data.X_test'; % load testing data 
-            tst.y = feat_data.y_test_bin;
+            tst.y = feat_data.y_test;
 
-            ypred = linclass(tst.X,model); % classify testing data 
-            error = cerror(ypred,tst.y);
+            test_result = linclass(tst.X,model); % classify testing data 
+            error = cerror(test_result,tst.y);
             
-            output = [model, ypred, error];
+            output = [test_result, error];
+            Util.confusion_matrix(test_result, tst.y, 1);
         end
         
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -41,7 +43,6 @@ classdef Classifier
             classes = unique(feat_data.y_train);
             n_classes = numel(classes);
             data_X = feat_data.X_train';
-            data_X_test = feat_data.X_test';
             
             % -- Train -- %
             m = zeros(n_features, n_classes);
@@ -57,17 +58,22 @@ classdef Classifier
             for c = 1:n_classes
                 b(c) = -0.5 * m(:,c)'*m(:,c); %Euclidean bias
             end
-            b
             model = struct('W', m, 'b', b);
             
             % -- Test -- %
-            test_result = linclass(data_X_test,model); % classify testing data 
+            test_result = linclass(feat_data.X_test',model); % classify testing data 
             error = cerror(test_result, feat_data.y_test);
             error
-
+            
             % -> TODO We need to plot the hyperplane
+            out.X = feat_data.X_train';
+            out.y = feat_data.y_train;
+            ppatterns(out); pline(model);
+%             size(model.W)
+%             size(model.b)
+%             plane3(model);
 
-            Util.confusion_matrix(test_result, feat_data.y_test, 0);
+            Util.confusion_matrix(test_result, feat_data.y_test, 1);
         end
         
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -103,14 +109,13 @@ classdef Classifier
             test_result = linclass(data_X_test,model); % classify testing data 
             error = cerror(test_result, feat_data.y_test);
             error
-            
-            cm
-            
-            b
 
             % -> TODO We need to plot the hyperplane
+%             out.X = feat_data.X_train';
+%             out.y = feat_data.y_train;
+%             ppatterns(out); pline(model);
 
-            Util.confusion_matrix(test_result, feat_data.y_test, 0);
+            Util.confusion_matrix(test_result, feat_data.y_test, 1);
         end
     end
 end
