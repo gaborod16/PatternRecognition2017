@@ -32,9 +32,9 @@ classdef Classifier
             output = [model, ypred, error];
         end
         
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        % Minimmum distance classifier %
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        % Minimmum distance classifier Euclidean Distance %
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         function [output] = MinDistEuc(feat_data)         
             
             n_features = feat_data.n_features;
@@ -57,7 +57,7 @@ classdef Classifier
             for c = 1:n_classes
                 b(c) = -0.5 * m(:,c)'*m(:,c); %Euclidean bias
             end
-
+            b
             model = struct('W', m, 'b', b);
             
             % -- Test -- %
@@ -67,7 +67,50 @@ classdef Classifier
 
             % -> TODO We need to plot the hyperplane
 
-            Util.confusion_matrix(test_result, feat_data.y_test, 1);
+            Util.confusion_matrix(test_result, feat_data.y_test, 0);
         end
-end
+        
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        % Minimmum distance classifier Mahalanobis distance %
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        function [output] = MinDistMah(feat_data)         
+            
+            n_features = feat_data.n_features;
+            classes = unique(feat_data.y_train);
+            n_classes = numel(classes);
+            data_X = feat_data.X_train';
+            data_X_test = feat_data.X_test';
+            
+            % -- Train -- %
+            cm = cov(data_X');
+            m = zeros(n_features, n_classes);
 
+            for i = 1:n_features
+                for c = 1:n_classes
+                    m(i,c) = mean(data_X(i, find(feat_data.y_train==classes(c))));
+                end
+            end
+
+            b = zeros(n_classes,1);
+
+            for c = 1:n_classes
+                b(c) = -0.5 * m(:,c)' * cm' * m(:,c); %Mahalanobis bias
+            end
+            
+            model = struct('W', cm'*m, 'b', b);
+            
+            % -- Test -- %
+            test_result = linclass(data_X_test,model); % classify testing data 
+            error = cerror(test_result, feat_data.y_test);
+            error
+            
+            cm
+            
+            b
+
+            % -> TODO We need to plot the hyperplane
+
+            Util.confusion_matrix(test_result, feat_data.y_test, 0);
+        end
+    end
+end
