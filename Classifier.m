@@ -32,126 +32,42 @@ classdef Classifier
             output = [model, ypred, error];
         end
         
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        % Minimmum distance classifier for the binary scenario %
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        function [output] = MinDistEuc_bin(feat_data)         
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        % Minimmum distance classifier %
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        function [output] = MinDistEuc(feat_data)         
             
-            n_train_samples = size(feat_data.y_train,2);
-            n_test_samples = size(feat_data.y_test,2);
             n_features = feat_data.n_features;
+            classes = unique(feat_data.y_train);
+            n_classes = numel(classes);
+            data_X = feat_data.X_train';
+            data_X_test = feat_data.X_test';
             
-            % Measures per class (walking and not walking)
-            m_walking=[];
-            m_not_walking=[];
+            % -- Train -- %
+            m = zeros(n_features, n_classes);
 
-            for i=1:n_train_samples %Nº train samples
-                if feat_data.y_train(i) == 1
-                    m_walking=[m_walking; feat_data.X_train(i,:)];
-                else
-                    m_not_walking=[m_not_walking; feat_data.X_train(i,:)];
+            for i = 1:n_features
+                for c = 1:n_classes
+                    m(i,c) = mean(data_X(i, find(feat_data.y_train==classes(c))));
                 end
             end
-            
-            w_means = zeros(n_features,1);
-            nw_means = zeros(n_features,1);
-            for i=1:n_features
-                w_means(i) = mean(m_walking(:,i));
-                nw_means(i) = mean(m_not_walking(:,i));
+
+            b = zeros(n_classes,1);
+
+            for c = 1:n_classes
+                b(c) = -0.5 * m(:,c)'*m(:,c); %Euclidean bias
             end
+
+            model = struct('W', m, 'b', b);
             
             % -- Test -- %
-            test_result = [];
-
-            for i=1:n_test_samples
-                dist_w = Util.Euclidean_dist(w_means, feat_data.X_test(i,:));
-                dist_n_w = Util.Euclidean_dist(nw_means, feat_data.X_test(i,:));
-
-                if dist_w < dist_n_w
-                    test_result=[test_result 1];
-                else
-                    test_result=[test_result 2];
-                end
-            end
-            
-            error = cerror(test_result,feat_data.y_test)
-            %output=[model, test_result, error];
+            test_result = linclass(data_X_test,model); % classify testing data 
+            error = cerror(test_result, feat_data.y_test);
+            error
 
             % -> TODO We need to plot the hyperplane
 
             Util.confusion_matrix(test_result, feat_data.y_test, 1);
         end
-        
-        % Minimmum distance classifier for the multiclass scenario
-        function [output] = MinDistEuc_mult(feat_data)
-            
-            n_train_samples = size(feat_data.y_train,2);
-            n_test_samples = size(feat_data.y_test,2);
-            n_features = feat_data.n_features;
-            
-            %distancia à média
-            m_1=[];
-            m_2=[];
-            m_3=[];
-            m_4=[];
-            m_5=[];
-            m_6=[];
-
-            for i=1:n_train_samples
-                if feat_data.y_train(i)==1 
-                    m_1=[m_1; feat_data.X_train(i,:)];
-                elseif feat_data.y_train(i)==2 
-                    m_2=[m_2;feat_data.X_train(i,:)];
-                elseif feat_data.y_train(i)==3
-                    m_3=[m_3; feat_data.X_train(i,:)];
-                elseif feat_data.y_train(i)==4
-                    m_4=[m_4; feat_data.X_train(i,:)];
-                elseif feat_data.y_train(i)==5
-                    m_5=[m_5; feat_data.X_train(i,:)];
-                elseif feat_data.y_train(i)==6
-                    m_6=[m_6; feat_data.X_train(i,:)];   
-                end
-
-            end
-
-            c1_means = zeros(n_features,1);
-            c2_means = zeros(n_features,1);
-            c3_means = zeros(n_features,1);
-            c4_means = zeros(n_features,1);
-            c5_means = zeros(n_features,1);
-            c6_means = zeros(n_features,1);
-            for i=1:n_features
-                c1_means(i) = mean(m_1(:,i));
-                c2_means(i) = mean(m_2(:,i));
-                c3_means(i) = mean(m_3(:,i));
-                c4_means(i) = mean(m_4(:,i));
-                c5_means(i) = mean(m_5(:,i));
-                c6_means(i) = mean(m_6(:,i));
-            end
-
-            % -- Test -- %
-            test_result6=[];
-            matrix6=zeros(6);
-
-            for i=1:n_test_samples
-                
-                dist_c1 = Util.Euclidean_dist(c1_means, feat_data.X_test(i,:));
-                dist_c2 = Util.Euclidean_dist(c2_means, feat_data.X_test(i,:));
-                dist_c3 = Util.Euclidean_dist(c3_means, feat_data.X_test(i,:));
-                dist_c4 = Util.Euclidean_dist(c4_means, feat_data.X_test(i,:));
-                dist_c5 = Util.Euclidean_dist(c5_means, feat_data.X_test(i,:));
-                dist_c6 = Util.Euclidean_dist(c6_means, feat_data.X_test(i,:)); 
-
-                [~,I]=min([dist_c1,dist_c2,dist_c3,dist_c4,dist_c5,dist_c6]);
-
-                test_result6 = [test_result6 I];
-
-            end
-            
-            error = cerror(test_result,feat_data.y_test)
-            Util.confusion_matrix(test_result6, feat_data.y_test, 1);
-        end
-    end
-    
 end
 
