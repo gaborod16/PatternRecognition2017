@@ -11,7 +11,7 @@ classdef FeatureProcess
     methods(Static)
         
         % Pearson correlation
-        function [new_data] = RemCorrelated(data)
+        function [new_data, new_meta] = RemCorrelated(data,meta)
             R = corrcoef(data.X_train);
             new_IX = [];
             for i = 1:size(R,1)
@@ -31,6 +31,9 @@ classdef FeatureProcess
             new_data = data;
             new_data.X_train = data.X_train(:,new_IX);
             new_data.X_test = data.X_test(:,new_IX);
+            new_meta = meta;
+            new_meta.n_features = numel(new_IX);
+            new_meta.features = meta.features(new_IX);
         end
         
         % Scaling

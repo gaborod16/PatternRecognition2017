@@ -72,6 +72,7 @@ classdef Classifier
                 out.X = feat_data.X_train';
                 out.y = feat_data.y_train;
                 ppatterns(out); 
+%               pboundary(model);
 %               size(model.W)
 %               size(model.b)
 %               plane3(model);
