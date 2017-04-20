@@ -42,3 +42,23 @@ Classifier.MinDistEuc(kwb);
 load read_source.mat;
 kwb = FeatureProcess.LDA(data,3,1);
 Classifier.MinDistMah(kwb);
+
+%% Multiclass classification KW + MinDistEuc
+load read_source.mat;
+kwb = FeatureProcess.KruskalWallis(data,meta,3,0);
+Classifier.MinDistEuc(kwb);
+
+%% Multiclass classification KW + MinDistMah
+load read_source.mat;
+kwb = FeatureProcess.KruskalWallis(data,meta,3,0);
+Classifier.MinDistMah(kwb);
+
+%% Multiclass classification PCA + MinDistEuc
+load read_source.mat;
+kwb = FeatureProcess.PCA(data,3,0);
+Classifier.MinDistEuc(kwb);
+
+%% Multiclass classification PCA + MinDistMah
+load read_source.mat;
+kwb = FeatureProcess.PCA(data,3,0);
+Classifier.MinDistMah(kwb);
