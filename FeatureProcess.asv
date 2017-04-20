@@ -10,28 +10,7 @@ classdef FeatureProcess
     
     methods(Static)
         
-        % Pearson correlation
-        function [new_data] = RemCorrelated(data)
-            R = corrcoef(data.X_train);
-            new_IX = [];
-            for i = 1:size(R,1)
-                counter = 0;
-                for j = i+1:size(R,1)
-                    if(R(i,j) > 0.95)
-                        %new_IX = [new_IX, j];
-                        counter = 1;
-                    end
-                end
-                if(counter == 0)
-                    new_IX = [new_IX, i];
-                end
-            end
-
-            %new_IX = unique(new_IX);
-            new_data = data;
-            new_data.X_train = data.X_train(:,new_IX);
-            new_data.X_test = data.X_test(:,new_IX);
-        end
+        function [data]
         
         % Scaling
         function [scaled_data] = SimpleScale(data)

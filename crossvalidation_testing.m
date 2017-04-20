@@ -16,8 +16,11 @@ for i=1:n_folds
     xval.y_test = datay(:,itst{1});
     xval.X_train = dataX(itrn{1},:);
     xval.y_train = datay(:,itrn{1});
-    [~,conf_matrix,v_error(i)] = Classifier.MinDistMah(xval,0);
+    [~,conf_matrix,v_error(i)] = Classifier.FisherLD_bin(xval,0);
     final_matrix=final_matrix+conf_matrix;
 end
+
+m = mean(v_error)
+st = std(v_error)
 
 Util.statistics(final_matrix);

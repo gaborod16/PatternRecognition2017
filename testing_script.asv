@@ -1,97 +1,108 @@
 %% Binary classification KW + FisherLD
 load read_source.mat;
 kwb = FeatureProcess.KruskalWallis(data,meta,3,1);
-Classifier.FisherLD_bin(kwb);
+Classifier.FisherLD_bin(kwb,1);
 
 %% Binary classification KW + MinDistEuc
 load read_source.mat;
 kwb = FeatureProcess.KruskalWallis(data,meta,3,1);
-Classifier.MinDistEuc(kwb);
+Classifier.MinDistEuc(kwb,1);
 
 %% Binary classification KW + MinDistMah
 load read_source.mat;
 kwb = FeatureProcess.KruskalWallis(data,meta,3,1);
-Classifier.MinDistMah(kwb);
+Classifier.MinDistMah(kwb,1);
 
 %% Binary classification PCA + FisherLD
 load read_source.mat;
-<<<<<<< HEAD
-kwb = FeatureProcess.PCA(data,3,1);
-Classifier.FisherLD_bin(kwb);
-
-%% Binary classification PCA + MinDistEuc
-load read_source.mat;
-kwb = FeatureProcess.PCA(data,3,1);
-Classifier.MinDistEuc(kwb);
-
-%% Binary classification PCA + MinDistMah
-load read_source.mat;
-kwb = FeatureProcess.PCA(data,3,1);
-Classifier.MinDistMah(kwb);
-
-%% Binary classification LDA + FisherLD
-load read_source.mat;
-kwb = FeatureProcess.LDA(data,3,1);
-Classifier.FisherLD_bin(kwb);
-
-%% Binary classification LDA + MinDistEuc
-load read_source.mat;
-kwb = FeatureProcess.LDA(data,3,1);
-Classifier.MinDistEuc(kwb);
-
-%% Binary classification LDA + MinDistMah
-load read_source.mat;
-kwb = FeatureProcess.LDA(data,3,1);
-Classifier.MinDistMah(kwb);
-
-%% Multiclass classification KW + MinDistEuc
-
-%% Multiclass classification KW + MinDistMah
-
-%% Multiclass classification PCA + MinDistMah
-
-%% Multiclass classification PCA + MinDistEuc
-=======
 pcab = FeatureProcess.PCA(data,3,1);
-Classifier.FisherLD_bin(pcab);
+Classifier.FisherLD_bin(pcab,1);
 
 %% Binary classification PCA + MinDistEuc
 load read_source.mat;
 pcab = FeatureProcess.PCA(data,3,1);
-Classifier.MinDistEuc(pcab);
+Classifier.MinDistEuc(pcab,1);
 
 %% Binary classification PCA + MinDistMah
 load read_source.mat;
 pcab = FeatureProcess.PCA(data,3,1);
-Classifier.MinDistMah(pcab);
+Classifier.MinDistMah(pcab,1);
 
 %% Binary classification LDA + FisherLD
 load read_source.mat;
 ldab = FeatureProcess.LDA(data,3,1);
-Classifier.FisherLD_bin(ldab);
+Classifier.FisherLD_bin(ldab,1);
 
 %% Binary classification LDA + MinDistEuc
 load read_source.mat;
 ldab = FeatureProcess.LDA(data,3,1);
-Classifier.MinDistEuc(ldab);
+Classifier.MinDistEuc(ldab,1);
 
 %% Binary classification LDA + MinDistMah
 load read_source.mat;
 ldab = FeatureProcess.LDA(data,3,1);
-Classifier.MinDistMah(ldab);
+Classifier.MinDistMah(ldab,1);
 
 %% Multiclass classification Kruskal + MinDistEuc
 load read_source.mat;
-kwb = FeatureProcess.KruskalWallis(data,meta,3,0);
-Classifier.MinDistEuc(kwb);
+kwm = FeatureProcess.KruskalWallis(data,meta,3,0);
+Classifier.MinDistEuc(kwm,1);
 
 %% Multiclass classification Kruskal + MinDistMah
 load read_source.mat;
-kwb = FeatureProcess.KruskalWallis(data,meta,3,0);
-Classifier.MinDistMah(kwb);
+kwm = FeatureProcess.KruskalWallis(data,meta,3,0);
+Classifier.MinDistMah(kwm,1);
 
-%% Multiclass classification P + MinDistMah
+%% Multiclass classification PCA + MinDistEuc
 load read_source.mat;
-kwb = FeatureProcess.KruskalWallis(data,meta,3,0);
-Classifier.MinDistMah(kwb);
->>>>>>> origin/master
+pcam = FeatureProcess.PCA(data,3,0);
+Classifier.MinDistEuc(pcam,1);
+
+%% Multiclass classification PCA + MinDistMah
+load read_source.mat;
+pcam = FeatureProcess.PCA(data,3,0);
+Classifier.MinDistMah(pcam,1);
+
+%% Multiclass classification LDA + MinDistEuc
+load read_source.mat;
+ldam = FeatureProcess.LDA(data,3,0);
+Classifier.MinDistEuc(ldam,1);
+
+%% Multiclass classification LDA + MinDistMah
+load read_source.mat;
+ldam = FeatureProcess.LDA(data,3,0);
+Classifier.MinDistMah(ldam,1);
+
+%% Pearson correlation
+
+R = corrcoef(data.X_train);
+new_IX = [];
+for i = 1:size(R,1)
+    counter = 0;
+    for j = i+1:size(R,1)
+        if(R(i,j) > 0.95)
+            %new_IX = [new_IX, j];
+            counter = 1;
+        end
+    end
+    if(counter == 0)
+        new_IX = [new_IX, i];
+    end
+end
+
+new_IX = unique(new_IX);
+new_dataX = data.X_train(:,new_IX);
+size(new_dataX)
+
+
+%%
+for i = 1:7
+    for j = i+1:7
+        if(R(i,j) > 0.95)
+            new_IX = [new_IX, j];
+        end
+    end
+end
+
+new_IX= unique(new_IX)
+

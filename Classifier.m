@@ -21,7 +21,8 @@ classdef Classifier
             trn.name = 'FLD';
             model = fld(trn); % compute FLD 
             if(show)
-                figure; ppatterns(trn); pline(model); 
+                figure; ppatterns(trn); %pline(model); 
+                plane3(model);
                 model
             end
 
@@ -59,7 +60,7 @@ classdef Classifier
             for c = 1:n_classes
                 b(c) = -0.5 * m(:,c)'*m(:,c); %Euclidean bias
             end
-            model = struct('W', m, 'b', b);
+            model = struct('W', m, 'b', b, 'fun', 'linclass');
             
             % -- Test -- %
             test_result = linclass(feat_data.X_test',model); % classify testing data 
@@ -71,7 +72,6 @@ classdef Classifier
                 out.X = feat_data.X_train';
                 out.y = feat_data.y_train;
                 ppatterns(out); 
-%               pline(model);
 %               size(model.W)
 %               size(model.b)
 %               plane3(model);
