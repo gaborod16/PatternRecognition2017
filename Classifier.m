@@ -71,12 +71,11 @@ classdef Classifier
                 out.X = feat_data.X_train';
                 out.y = feat_data.y_train;
                 ppatterns(out); 
-    %               pline(model);
-    %             size(model.W)
-    %             size(model.b)
-    %             plane3(model);
+%               pline(model);
+%               size(model.W)
+%               size(model.b)
+%               plane3(model);
             end
-            
 
             Util.confusion_matrix(test_result, feat_data.y_test, 1);
         end
