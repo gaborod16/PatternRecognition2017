@@ -96,4 +96,3 @@ Classifier.MinDistEuc(ldam);
 load read_source.mat;
 ldam = FeatureProcess.LDA(data,3,0);
 Classifier.MinDistMah(ldam);
->>>>>>> origin/master

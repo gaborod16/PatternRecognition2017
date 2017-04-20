@@ -68,12 +68,8 @@ classdef Classifier
             % -> TODO We need to plot the hyperplane
             out.X = feat_data.X_train';
             out.y = feat_data.y_train;
-<<<<<<< HEAD
             ppatterns(out); %pline(model);
-=======
-            ppatterns(out); 
-%               pline(model);
->>>>>>> origin/master
+
 %             size(model.W)
 %             size(model.b)
 %             plane3(model);
