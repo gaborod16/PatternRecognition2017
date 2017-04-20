@@ -12,7 +12,7 @@ classdef Classifier
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         % Fisher linear discriminant for the binary scenario %
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        function [test_result, error] = FisherLD_bin(feat_data, show)
+        function [test_result,conf_matrix, error] = FisherLD_bin(feat_data, show)
             trn = struct();
             trn.X = feat_data.X_train'; % load training data
             trn.y = feat_data.y_train;
@@ -32,13 +32,13 @@ classdef Classifier
             test_result = linclass(tst.X,model); % classify testing data 
             error = cerror(test_result,tst.y);
            
-            Util.confusion_matrix(test_result, tst.y, 1);
+            conf_matrix=Util.confusion_matrix(test_result, tst.y, 1);
         end
         
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         % Minimmum distance classifier Euclidean Distance %
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        function [test_result, error] = MinDistEuc(feat_data, show)         
+        function [test_result,conf_matrix, error] = MinDistEuc(feat_data, show)         
             
             n_features = feat_data.n_features;
             classes = unique(feat_data.y_train);
@@ -77,13 +77,13 @@ classdef Classifier
 %               plane3(model);
             end
 
-            Util.confusion_matrix(test_result, feat_data.y_test, 1);
+            conf_matrix=Util.confusion_matrix(test_result, feat_data.y_test, 1);
         end
         
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         % Minimmum distance classifier Mahalanobis distance %
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        function [test_result, error] = MinDistMah(feat_data, show)         
+        function [test_result,conf_matrix, error] = MinDistMah(feat_data, show)         
             
             n_features = feat_data.n_features;
             classes = unique(feat_data.y_train);
@@ -122,7 +122,7 @@ classdef Classifier
     %             pline(model);
             end
             
-            Util.confusion_matrix(test_result, feat_data.y_test, 1);
+            conf_matrix=Util.confusion_matrix(test_result, feat_data.y_test, 1);
         end
     end
 end
