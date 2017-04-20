@@ -1,12 +1,12 @@
-function [ output_args ] = crossval( data, classifier_name )
-%CROSSVAL
+function [ output_args ] = crossvalidation( data, classifier_name )
+%CROSSVALIDATION
     % Cross validation test
 
     dataX = data.X_train;
     datay = data.y_train;
     n_folds = 10;
     n_data = numel(datay);
-    classifier = str2func(classfier_name);
+    classifier = str2func(classifier_name);
     v_error = zeros(n_folds,1);
 
     xval = data;

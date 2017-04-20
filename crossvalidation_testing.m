@@ -24,3 +24,7 @@ m = mean(v_error)
 st = std(v_error)
 
 Util.statistics(final_matrix);
+
+
+%%
+crossvalidation(kwb, 'Classifier.FisherLD_bin');
