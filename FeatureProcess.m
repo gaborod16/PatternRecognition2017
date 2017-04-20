@@ -101,10 +101,10 @@ classdef FeatureProcess
             new_data.y_test = in_test_data.y;
             new_data.n_features = n_wanted_features;
 
-            figure; 
-            ppatterns(out_data);
-            figure; 
-            ppatterns(out_test_data);
+%             figure; 
+%             ppatterns(out_data);
+%             figure; 
+%             ppatterns(out_test_data);
         end
         
         % Linear discriminant analysis method for the binary scenario
@@ -130,10 +130,10 @@ classdef FeatureProcess
             new_data.y_test = in_test_data.y;
             new_data.n_features = n_wanted_features;
             
-            figure; 
-            ppatterns(out_data);
-            figure; 
-            ppatterns(out_test_data);
+%             figure; 
+%             ppatterns(out_data);
+%             figure; 
+%             ppatterns(out_test_data);
         end
     end
     
