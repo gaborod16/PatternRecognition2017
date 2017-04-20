@@ -12,7 +12,7 @@ classdef Classifier
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         % Fisher linear discriminant for the binary scenario %
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        function [output] = FisherLD_bin(feat_data)
+        function [test_result, error] = FisherLD_bin(feat_data, show)
             trn = struct();
             trn.X = feat_data.X_train'; % load training data
             trn.y = feat_data.y_train;
@@ -20,8 +20,10 @@ classdef Classifier
             [trn.dim, trn.num_data] = size(trn.X);
             trn.name = 'FLD';
             model = fld(trn); % compute FLD 
-            figure; ppatterns(trn); pline(model); 
-            model
+            if(show)
+                figure; ppatterns(trn); pline(model); 
+                model
+            end
 
             % plot data and solution 
             tst.X = feat_data.X_test'; % load testing data 
@@ -29,15 +31,14 @@ classdef Classifier
 
             test_result = linclass(tst.X,model); % classify testing data 
             error = cerror(test_result,tst.y);
-            
-            output = [test_result, error];
+           
             Util.confusion_matrix(test_result, tst.y, 1);
         end
         
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         % Minimmum distance classifier Euclidean Distance %
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        function [output] = MinDistEuc(feat_data)         
+        function [test_result, error] = MinDistEuc(feat_data, show)         
             
             n_features = feat_data.n_features;
             classes = unique(feat_data.y_train);
@@ -66,13 +67,16 @@ classdef Classifier
             error
             
             % -> TODO We need to plot the hyperplane
-            out.X = feat_data.X_train';
-            out.y = feat_data.y_train;
-            ppatterns(out); 
-%               pline(model);
-%             size(model.W)
-%             size(model.b)
-%             plane3(model);
+            if (show)
+                out.X = feat_data.X_train';
+                out.y = feat_data.y_train;
+                ppatterns(out); 
+    %               pline(model);
+    %             size(model.W)
+    %             size(model.b)
+    %             plane3(model);
+            end
+            
 
             Util.confusion_matrix(test_result, feat_data.y_test, 1);
         end
@@ -80,7 +84,7 @@ classdef Classifier
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         % Minimmum distance classifier Mahalanobis distance %
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        function [output] = MinDistMah(feat_data)         
+        function [test_result, error] = MinDistMah(feat_data, show)         
             
             n_features = feat_data.n_features;
             classes = unique(feat_data.y_train);
@@ -111,12 +115,14 @@ classdef Classifier
             error = cerror(test_result, feat_data.y_test);
             error
 
-            % -> TODO We need to plot the hyperplane
-            out.X = feat_data.X_train';
-            out.y = feat_data.y_train;
-            ppatterns(out); 
-%             pline(model);
-
+            if (show)
+                % -> TODO We need to plot the hyperplane
+                out.X = feat_data.X_train';
+                out.y = feat_data.y_train;
+                ppatterns(out); 
+    %             pline(model);
+            end
+            
             Util.confusion_matrix(test_result, feat_data.y_test, 1);
         end
     end

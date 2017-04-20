@@ -1,0 +1,16 @@
+%% Cross validation test
+
+
+dataX = kwb.X_train;
+datay = kwb.y_train;
+n_folds = 100;
+n_data = numel(datay);
+v_error = zeros(n_folds,1);
+
+xval = kwb;
+[itrn,itst] = crossval(n_data,n_folds);
+
+for i=1:n_folds
+    xval.X_train = X_train(itrn)
+    Classifier.FisherLD_bin();
+end
