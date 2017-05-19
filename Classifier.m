@@ -72,7 +72,7 @@ classdef Classifier
                 out.X = feat_data.X_train';
                 out.y = feat_data.y_train;
                 ppatterns(out); 
-%               pboundary(model);
+%                 pline(model.W(:,1), model.b(1));
 %               size(model.W)
 %               size(model.b)
 %               plane3(model);
@@ -124,6 +124,33 @@ classdef Classifier
             end
             
             conf_matrix=Util.confusion_matrix(test_result, feat_data.y_test, 1);
+        end
+        
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        %  Support Vector Machine with parameters training  %
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        function [test_result,conf_matrix, error] = SupportVM(feat_data, show) 
+            trn = struct();
+            trn.X = feat_data.X_train'; % load training data
+            trn.y = feat_data.y_train;
+            
+            tst.X = feat_data.X_test'; % load testing data 
+            tst.y = feat_data.y_test;
+
+            [trn.dim, trn.num_data] = size(trn.X);
+            trn.name = 'SVM';
+            
+            model = fitcecoc(trn.X, trn.y, 'Learners', t, 'ObservationsIn', 'columns', 'Coding', 'onevsall', 'OptimizeHyperparameters', 'auto');
+            test_result = predict(model, tst.X, 'ObservationsIn', 'columns');
+            cerror(test_result, tst.y)
+           
+            % plot data and solution 
+            if(show)
+                figure; ppatterns(trn); %pline(model); 
+%                 plane3(model);
+            end
+            
+            conf_matrix=Util.confusion_matrix(test_result, tst.y, 1);
         end
     end
 end

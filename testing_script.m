@@ -52,6 +52,15 @@ load read_source.mat;
 ldab = FeatureProcess.LDA(data,3,1);
 Classifier.MinDistMah(ldab,1);
 
+%% Binary classification LDA + SVM
+load read_source.mat;
+[data, meta] = FeatureProcess.RemCorrelated(data, meta);
+ldab = FeatureProcess.LDA(data,3,1);
+Classifier.SupportVM(ldab,1);
+
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
 %% Multiclass classification Kruskal + MinDistEuc
 load read_source.mat;
 [data, meta] = FeatureProcess.RemCorrelated(data, meta);
@@ -63,6 +72,12 @@ load read_source.mat;
 [data, meta] = FeatureProcess.RemCorrelated(data, meta);
 kwm = FeatureProcess.KruskalWallis(data,meta,3,0);
 Classifier.MinDistMah(kwm,1);
+
+%% Multiclass classification Kruskal + SVM
+load read_source.mat;
+[data, meta] = FeatureProcess.RemCorrelated(data, meta);
+kwm = FeatureProcess.KruskalWallis(data,meta,3,0);
+Classifier.SupportVM(kwm,1);
 
 %% Multiclass classification PCA + MinDistEuc
 load read_source.mat;
@@ -76,6 +91,12 @@ load read_source.mat;
 pcam = FeatureProcess.PCA(data,3,0);
 Classifier.MinDistMah(pcam,1);
 
+%% Multiclass classification PCA + SVM
+load read_source.mat;
+[data, meta] = FeatureProcess.RemCorrelated(data, meta);
+pcam = FeatureProcess.PCA(data,3,0);
+Classifier.SupportVM(pcam,1);
+
 %% Multiclass classification LDA + MinDistEuc
 load read_source.mat;
 [data, meta] = FeatureProcess.RemCorrelated(data, meta);
@@ -88,3 +109,8 @@ load read_source.mat;
 ldam = FeatureProcess.LDA(data,3,0);
 Classifier.MinDistMah(ldam,1);
 
+%% Multiclass classification LDA + SVM
+load read_source.mat;
+[data, meta] = FeatureProcess.RemCorrelated(data, meta);
+ldam = FeatureProcess.LDA(data,3,0);
+Classifier.SupportVM(ldam,1);
