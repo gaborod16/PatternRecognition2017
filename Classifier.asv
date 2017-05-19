@@ -170,22 +170,27 @@ classdef Classifier
             
             for c = 1:n_classes
                 idx = find(trn.y(:) == c);
-                trn_c = trn;
-                trn_c.X = trn.X(:,idx);
-                trn_c.y = trn.y(idx);
-                trn_c.num_data = numel(idx);
-                model.Pclass{c} = mlcgmm(trn_c);
+                trn_c = 
             end
 
-            [test_result, dfce] = bayescls(tst.X,model);
-            error = cerror(test_result, tst.y)
-           
-            % plot data and solution 
-            if(show)
-                figure; ppatterns(trn); %pline(model); 
-            end
-            
-            conf_matrix=Util.confusion_matrix(test_result, tst.y, 1);
+            inx1 = find(data.y(:)==1);
+            inx2 = find(data.y(:)==2);
+
+            trn_c1 = data;
+            trn_c1.X = data.X(:,inx1);
+            trn_c1.y = data.y(inx1);
+            trn_c1.num_data = numel(inx1);
+
+            trn_c2 = data;
+            trn_c2.X = data.X(:,inx2);
+            trn_c2.y = data.y(inx2);
+            trn_c2.num_data = numel(inx2);
+
+            model.Pclass{1} = mlcgmm(trn_c1);
+            model.Pclass{2} = mlcgmm(trn_c2);
+
+            [y, dfce] = bayescls(test.X,model);
+            error = cerror(y, test.y)
         end
     end
 end

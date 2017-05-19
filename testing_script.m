@@ -97,6 +97,12 @@ load read_source.mat;
 pcam = FeatureProcess.PCA(data,3,0);
 Classifier.SupportVM(pcam,1);
 
+%% Multiclass classification PCA + Bayes
+load read_source.mat;
+[data, meta] = FeatureProcess.RemCorrelated(data, meta);
+pcam = FeatureProcess.PCA(data,3,0);
+Classifier.Bayesian(pcam,1);
+
 %% Multiclass classification LDA + MinDistEuc
 load read_source.mat;
 [data, meta] = FeatureProcess.RemCorrelated(data, meta);
