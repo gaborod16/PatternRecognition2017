@@ -140,6 +140,7 @@ classdef Classifier
             [trn.dim, trn.num_data] = size(trn.X);
             trn.name = 'SVM';
             
+            t = templateSVM('Standardize',1);
             model = fitcecoc(trn.X, trn.y, 'Learners', t, 'ObservationsIn', 'columns', 'Coding', 'onevsall', 'OptimizeHyperparameters', 'auto');
             test_result = predict(model, tst.X, 'ObservationsIn', 'columns');
             cerror(test_result, tst.y)
