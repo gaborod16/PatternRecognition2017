@@ -12,25 +12,54 @@ classdef Classifier
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         % Fisher linear discriminant for the binary scenario %
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        function [test_result,conf_matrix, error] = FisherLD_bin(feat_data, show)
+        function [test_result,conf_matrix, error] = FisherLD(feat_data, show)
+            classes = unique(feat_data.y_train);
+            n_classes = numel(classes);
             trn = struct();
             trn.X = feat_data.X_train'; % load training data
             trn.y = feat_data.y_train;
-
-            [trn.dim, trn.num_data] = size(trn.X);
-            trn.name = 'FLD';
-            model = fld(trn); % compute FLD 
-            if(show)
-                figure; ppatterns(trn); %pline(model); 
-                plane3(model);
-                model
-            end
-
-            % plot data and solution 
+            
             tst.X = feat_data.X_test'; % load testing data 
             tst.y = feat_data.y_test;
 
-            test_result = linclass(tst.X,model); % classify testing data 
+            [trn.dim, trn.num_data] = size(trn.X);
+            trn.name = 'FLD';
+            
+
+            if n_classes == 2 %Binary
+                model = fld(trn);
+                if(show)
+                    figure; ppatterns(trn); %pline(model); 
+                    plane3(model);
+                end
+            else
+%             % multi-class case 
+%             dfce = model.W'*X + model.b(:)*ones(1,num_data);
+%             [dummy,y] = max( dfce );
+                trn_c = trn;
+                % - That + 1 = this class = 1 and not this class = 2.
+                trn_c.y = 1 + (trn.y ~= 1);
+                model = fld(trn_c);
+                
+                if(show)
+                    figure; ppatterns(trn_c); %pline(model); 
+                    plane3(model);
+                end
+
+                for c = 2:n_classes
+                    trn_c = trn;
+                    trn_c.y = 1 + (trn.y ~= c);
+                    model_c = fld(trn_c);
+                    model.b = [model.b; model_c.b];
+                    model.W = [model.W model_c.W];
+                    if(show)
+                        figure; ppatterns(trn_c); %pline(model); 
+                        plane3(model_c);
+                    end
+                end
+            end
+            
+            [test_result, dfce] = linclass(tst.X,model); % classify testing data 
             error = cerror(test_result,tst.y);
            
             conf_matrix=Util.confusion_matrix(test_result, tst.y, 1);

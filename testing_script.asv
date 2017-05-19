@@ -90,12 +90,12 @@ Classifier.SupportVM(kwm,1);
 load read_source.mat;
 [data, meta] = FeatureProcess.RemCorrelated(data, meta);
 kwm = FeatureProcess.KruskalWallis(data,meta,3,0);
-Classifier.Bayesian(kwm,1);
+Classifier.Bayesian(pcam,1);
 
 %% Binary classification PCA + FisherLD
 load read_source.mat;
 [data, meta] = FeatureProcess.RemCorrelated(data, meta);
-pcab = FeatureProcess.PCA(data,3,0);
+pcab = FeatureProcess.PCA(data,3,1);
 Classifier.FisherLD(pcab,1);
 
 %% Multiclass classification PCA + MinDistEuc
@@ -122,9 +122,6 @@ load read_source.mat;
 pcam = FeatureProcess.PCA(data,3,0);
 Classifier.Bayesian(pcam,1);
 
-%%
-%%% LDA Doesn't work correctly for the multiclass scenario!
-%%%
 %% Multiclass classification LDA + MinDistEuc
 load read_source.mat;
 [data, meta] = FeatureProcess.RemCorrelated(data, meta);
