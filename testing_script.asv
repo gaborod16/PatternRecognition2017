@@ -1,3 +1,11 @@
+% %% Attribute selection!
+% load read_source.mat;
+% [data, meta] = FeatureProcess.RemCorrelated(data,meta);
+% kwb = FeatureProcess.KruskalWallis(data,meta,10,0);
+% pcab = FeatureProcess.PCA(data,10,0);
+% ldab = FeatureProcess.LDA(data,10,0);
+
+
 %% Binary classification Kruskal + FisherLD
 load read_source.mat;
 [data, meta] = FeatureProcess.RemCorrelated(data,meta);
@@ -34,7 +42,7 @@ load read_source.mat;
 pcab = FeatureProcess.PCA(data,3,1);
 Classifier.MinDistMah(pcab,1);
 
-%% Binary classification LDA + FisherLD
+%% Binary classification LDA + FisherLD [Perfect classification]
 load read_source.mat;
 [data, meta] = FeatureProcess.RemCorrelated(data, meta);
 ldab = FeatureProcess.LDA(data,3,1);
@@ -52,7 +60,7 @@ load read_source.mat;
 ldab = FeatureProcess.LDA(data,3,1);
 Classifier.MinDistMah(ldab,1);
 
-%% Binary classification LDA + SVM
+%% Binary classification LDA + SVM [Perfect classification]
 load read_source.mat;
 [data, meta] = FeatureProcess.RemCorrelated(data, meta);
 ldab = FeatureProcess.LDA(data,3,1);
@@ -90,12 +98,18 @@ Classifier.SupportVM(kwm,1);
 load read_source.mat;
 [data, meta] = FeatureProcess.RemCorrelated(data, meta);
 kwm = FeatureProcess.KruskalWallis(data,meta,3,0);
-Classifier.Bayesian(pcam,1);
+Classifier.Bayesian(kwm,1);
 
-%% Binary classification PCA + FisherLD
+%% Multiclass classification Kruskal + KNN
 load read_source.mat;
 [data, meta] = FeatureProcess.RemCorrelated(data, meta);
-pcab = FeatureProcess.PCA(data,3,1);
+kwm = FeatureProcess.KruskalWallis(data,meta,3,0);
+Classifier.KNearestNeighboors(kwm,1);
+
+%% Multiclass classification PCA + FisherLD
+load read_source.mat;
+[data, meta] = FeatureProcess.RemCorrelated(data, meta);
+pcab = FeatureProcess.PCA(data,3,0);
 Classifier.FisherLD(pcab,1);
 
 %% Multiclass classification PCA + MinDistEuc
@@ -122,6 +136,9 @@ load read_source.mat;
 pcam = FeatureProcess.PCA(data,3,0);
 Classifier.Bayesian(pcam,1);
 
+%%
+%%% LDA Doesn't work correctly for the multiclass scenario!
+%%%
 %% Multiclass classification LDA + MinDistEuc
 load read_source.mat;
 [data, meta] = FeatureProcess.RemCorrelated(data, meta);
@@ -139,3 +156,15 @@ load read_source.mat;
 [data, meta] = FeatureProcess.RemCorrelated(data, meta);
 ldam = FeatureProcess.LDA(data,3,0);
 Classifier.SupportVM(ldam,1);
+
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+
+%% Divide and Conquer Classifiers
+%% Binary classification LDA + FisherLD [Perfect classification]
+%% 
+load read_source.mat;
+[data, meta] = FeatureProcess.RemCorrelated(data, meta);
+ldab = FeatureProcess.LDA(data,3,1);
+Classifier.FisherLD(ldab,1);

@@ -60,24 +60,11 @@ classdef FeatureProcess
         end
         
         function [walking_data, not_walking_data] = divide_and_conquer(result, data)
-            idx_walking_train = result.train == 1;
-            idx_not_walking_train = find(result.train ~= 1);
-            idx_walking_test = result.test == 1;
-            idx_not_walking_test = find(result.test ~= 1);
-            
-            % Walking
+            max(result)
+            idx_walking = result == 1;
+            idx_not_walking = find(result ~= 1);
             walking_data = data;
-            walking_data.X_train = data.X_train(idx_walking_train,:);
-            walking_data.y_train = data.y_train(idx_walking_train);
-            walking_data.X_test = data.X_test(idx_walking_test,:);
-            walking_data.y_test = data.y_test(idx_walking_test);
-            
-            %Not Walking
-            not_walking_data = data;
-            not_walking_data.X_train = data.X_train(idx_not_walking_train,:);
-            not_walking_data.y_train = data.y_train(idx_not_walking_train) - 3;
-            not_walking_data.X_test = data.X_test(idx_not_walking_test,:);
-            not_walking_data.y_test = data.y_test(idx_not_walking_test) - 3;
+            walking_data.X = data.X(idx_walking);
             
         end
         
@@ -139,7 +126,7 @@ classdef FeatureProcess
             end
 
             model = pca(in_data.X, n_wanted_features);
-            in_data
+
             out_data = linproj(in_data,model);
             out_test_data = linproj(in_test_data,model);
 

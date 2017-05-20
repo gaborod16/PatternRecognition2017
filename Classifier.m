@@ -9,9 +9,9 @@ classdef Classifier
     end
     
     methods(Static)
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        % Fisher linear discriminant for the binary scenario %
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        % Fisher linear discriminant %
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         function [test_result,conf_matrix, error] = FisherLD(feat_data, show)
             classes = unique(feat_data.y_train);
             n_classes = numel(classes);
@@ -33,9 +33,6 @@ classdef Classifier
                     plane3(model);
                 end
             else
-%             % multi-class case 
-%             dfce = model.W'*X + model.b(:)*ones(1,num_data);
-%             [dummy,y] = max( dfce );
                 trn_c = trn;
                 % - That + 1 = this class = 1 and not this class = 2.
                 trn_c.y = 1 + (trn.y ~= 1);
@@ -169,8 +166,8 @@ classdef Classifier
             [trn.dim, trn.num_data] = size(trn.X);
             trn.name = 'SVM';
             
-            t = templateSVM('Standardize',1);
-            model = fitcecoc(trn.X, trn.y, 'Learners', t, 'ObservationsIn', 'columns', 'Coding', 'onevsall', 'OptimizeHyperparameters', 'auto');
+            t = templateSVM('Standardize',1, 'IterationLimit', 100);
+            model = fitcecoc(trn.X, trn.y, 'Learners', t, 'ObservationsIn', 'columns', 'Coding', 'onevsall', 'OptimizeHyperparameters', {'BoxConstraint', 'KernelScale'}, 'HyperparameterOptimizationOptions', struct('MaxObjectiveEvaluations',50, 'ShowPlots', show));
             test_result = predict(model, tst.X, 'ObservationsIn', 'columns');
             cerror(test_result, tst.y)
            
@@ -182,6 +179,9 @@ classdef Classifier
             conf_matrix=Util.confusion_matrix(test_result, tst.y, 1);
         end
         
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        %  Naive Bayes classifier  %
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%
         function [test_result, conf_matrix, error] = Bayesian(feat_data, show)
             classes = unique(feat_data.y_train);
             n_classes = numel(classes);
@@ -209,6 +209,63 @@ classdef Classifier
             [test_result, dfce] = bayescls(tst.X,model);
             error = cerror(test_result, tst.y)
            
+            % plot data and solution 
+            if(show)
+                figure; ppatterns(trn); %pline(model); 
+            end
+            
+            conf_matrix=Util.confusion_matrix(test_result, tst.y, 1);
+        end
+        
+        %%%%%%%%%%%%%%%%%%%%%%%%%%
+        %  K-nearest Neighboors  %
+        %%%%%%%%%%%%%%%%%%%%%%%%%%
+        function [test_result,conf_matrix, error] = KNearestNeighboors(feat_data, show) 
+            trn = struct();
+            trn.X = feat_data.X_train'; % load training data
+            trn.y = feat_data.y_train;
+            
+            tst.X = feat_data.X_test'; % load testing data 
+            tst.y = feat_data.y_test;
+
+            [trn.dim, trn.num_data] = size(trn.X);
+            trn.name = 'KNN';
+            
+            model = fitcknn(trn.X', trn.y,'Standardize',1, 'OptimizeHyperparameters',{'NumNeighbors'}, 'HyperparameterOptimizationOptions', struct('MaxObjectiveEvaluations',50, 'ShowPlots', show));
+            test_result = predict(model, tst.X')';
+            cerror(test_result, tst.y)
+           
+            % plot data and solution 
+            if(show)
+                figure; ppatterns(trn); %pline(model); 
+            end
+            
+            conf_matrix=Util.confusion_matrix(test_result, tst.y, 1);
+        end
+        
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        %  Hybrid clssifier: Bayes + KNN + MinDistEuc + Fisher One VS All  %
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        function [test_result,conf_matrix, error] = HybridClassifier(feat_data, show) 
+            trn = struct();
+            trn.X = feat_data.X_train'; % load training data
+            trn.y = feat_data.y_train;
+            
+            tst.X = feat_data.X_test'; % load testing data 
+            tst.y = feat_data.y_test;
+
+            [trn.dim, trn.num_data] = size(trn.X);
+            trn.name = 'Hybrid';
+            
+            test_results = Classifier.Bayesian(feat_data,0);
+            test_result2 = Classifier.KNearestNeighboors(feat_data,0);
+            test_result3 = Classifier.MinDistEuc(feat_data,0);
+            test_result4 = Classifier.FisherLD(feat_data,0);
+            
+            test_results = [test_results; test_result2; test_result3; test_result4];
+            
+            test_result = mode(test_results);
+            
             % plot data and solution 
             if(show)
                 figure; ppatterns(trn); %pline(model); 

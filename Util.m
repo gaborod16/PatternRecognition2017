@@ -17,7 +17,7 @@ classdef Util
         
         function result = statistics(conf_matrix)
        
-            
+
               
                 sprintf('accuracy = %.4f',sum(diag(conf_matrix)) / sum(sum(conf_matrix)))
                 if (size(conf_matrix,1) == 2)
