@@ -117,41 +117,26 @@ if classifier=="euclidean"
     [test_result,conf_matrix, error]=Classifier.MinDistEuc(features,1);
     
 elseif classifier=="mahalanobis"
-    Classifier.MinDistMah(features,1);
+    [test_result,conf_matrix, error]=Classifier.MinDistMah(features,1);
     
 elseif classifier=="fisher"
-    Classifier.FisherLD(features,1);
+    [test_result,conf_matrix, error]=Classifier.FisherLD(features,1);
     
 elseif classifier=="svm"
-    Classifier.SupportVM(features,1);
+    [test_result,conf_matrix, error]=Classifier.SupportVM(features,1);
     
 elseif classifier=="bayes"
-    Classifier.Bayesian(features,1);
+    [test_result,conf_matrix, error]=Classifier.Bayesian(features,1);
     
 elseif classifier=="knn"
-    Classifier.KNearestNeighboors(features,1);
+    [test_result,conf_matrix, error]=Classifier.KNearestNeighboors(features,1);
     
 elseif classifier=="hybrid"
-    Classifier.HybridClassifier(features,1);
+    [test_result,conf_matrix, error]=Classifier.HybridClassifier(features,1);
 end
 
-if binary==1
-    State={'Walking'; 'NotWalking'};
-    Walking=conf_matrix(:,1);
-    NotWalking=conf_matrix(:,2);   
-    matrix= table(Walking, NotWalking,'RowNames',State);
-else
-    State={'Walking'; 'Upstairs';'Downstairs','Sitting','Standing','Laying'};
-    Walking=conf_matrix(:,1);
-    Upstairs=conf_matrix(:,2);
-    Downstairs=conf_matrix(:,3);
-    Sitting=conf_matrix(:,4);
-    Standing=conf_matrix(:,5);
-    Laying=conf_matrix(:,6);
-    matrix= table(Walking,Upstairs,Downstairs,Sitting,Standing,Laying,'RowNames',State);
-end
-
-texto= sprintf(horzcat( '\n Error: ', mat2str(error)));
+accuracy=1-error;
+texto= sprintf(horzcat( '\n \n \n \n Error: ', mat2str(round(error,3)), '\n \n Accuracy: ',mat2str(round(accuracy,3))));
 
 set(handles.results,'String',texto);
 

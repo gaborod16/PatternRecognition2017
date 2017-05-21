@@ -146,6 +146,7 @@ classdef Classifier
                 % -> TODO We need to plot the hyperplane
                 out.X = feat_data.X_train';
                 out.y = feat_data.y_train;
+                figure()
                 ppatterns(out); 
     %             pline(model);
             end
@@ -170,7 +171,7 @@ classdef Classifier
             t = templateSVM('Standardize',1, 'IterationLimit', 100);
             model = fitcecoc(trn.X, trn.y, 'Learners', t, 'ObservationsIn', 'columns', 'Coding', 'onevsall', 'OptimizeHyperparameters', {'BoxConstraint', 'KernelScale'}, 'HyperparameterOptimizationOptions', struct('MaxObjectiveEvaluations',50, 'ShowPlots', show));
             test_result = predict(model, tst.X, 'ObservationsIn', 'columns');
-            cerror(test_result, tst.y)
+            error=cerror(test_result, tst.y)
            
             % plot data and solution 
             if(show)
