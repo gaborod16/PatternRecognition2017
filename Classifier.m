@@ -97,6 +97,7 @@ classdef Classifier
             if (show)
                 out.X = feat_data.X_train';
                 out.y = feat_data.y_train;
+                figure()
                 ppatterns(out); 
 %                 pline(model.W(:,1), model.b(1));
 %               size(model.W)
