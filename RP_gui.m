@@ -107,13 +107,11 @@ elseif fselect=="kruskal"
 
 elseif fselect=="lda"
     features = FeatureProcess.LDA(data,nfeatures,binary);
-
-else
-     %AUC
 end
         
 %Classification
 if classifier=="euclidean"
+    
     [test_result,conf_matrix, error]=Classifier.MinDistEuc(features,1);
     
 elseif classifier=="mahalanobis"
