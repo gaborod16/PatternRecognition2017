@@ -235,7 +235,7 @@ classdef Classifier
             
             model = fitcknn(trn.X', trn.y,'Standardize',1, 'OptimizeHyperparameters',{'NumNeighbors'}, 'HyperparameterOptimizationOptions', struct('MaxObjectiveEvaluations',50, 'ShowPlots', show));
             test_result = predict(model, tst.X')';
-            cerror(test_result, tst.y)
+            error = cerror(test_result, tst.y)
            
             % plot data and solution 
             if(show)
@@ -267,6 +267,7 @@ classdef Classifier
             test_results = [test_results; test_result2; test_result3; test_result4];
             
             test_result = mode(test_results);
+            error = cerror(test_result, tst.y)
             
             % plot data and solution 
             if(show)
