@@ -164,26 +164,4 @@ Classifier.SupportVM(ldam,1);
 %% Multiclass classification PCA + Bayes
 load read_source.mat;
 [data, meta] = FeatureProcess.RemCorrelated(data, meta);
-
-%Binary division
-ldab = FeatureProcess.LDA(data,3,1);
-[test_result, conf_matrix, error] = Classifier.FisherLD(ldab,1);
-
-%Updating dataset based on results
-bin_result = struct();
-bin_result.test = test_result;
-bin_result.train = data.y_train_bin;
-[walking_data, not_walking_data] = FeatureProcess.divide_and_conquer(bin_result, data);
-
-%Multiclass simplified division (2 predictions, 3 classes)
-pcam1 = FeatureProcess.PCA(walking_data,20,0);
-test_result1 = Classifier.HybridClassifier(pcam1,1);
-
-pcam2 = FeatureProcess.PCA(not_walking_data,20,0);
-test_result2 = Classifier.HybridClassifier(pcam2,1) + 3;
-
-total_test_data = [walking_data.y_test, not_walking_data.y_test + 3];
-total_test_result = [test_result1, test_result2];
-
-total_error = cerror(total_test_result, total_test_data);
-conf_matrix=Util.confusion_matrix(total_test_result, total_test_data, 1);
+Classifier.DivideConquer(data, 3, 'Classifier.Bayesian');
