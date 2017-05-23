@@ -233,7 +233,7 @@ classdef Classifier
             [trn.dim, trn.num_data] = size(trn.X);
             trn.name = 'KNN';
             
-            model = fitcknn(trn.X', trn.y,'Standardize',1, 'OptimizeHyperparameters',{'NumNeighbors'}, 'HyperparameterOptimizationOptions', struct('MaxObjectiveEvaluations',50, 'ShowPlots', show));
+            model = fitcknn(trn.X', trn.y,'Standardize',1, 'OptimizeHyperparameters',{'NumNeighbors'}, 'HyperparameterOptimizationOptions', struct('MaxObjectiveEvaluations',20, 'ShowPlots', show));
             test_result = predict(model, tst.X')';
             error = cerror(test_result, tst.y)
            
