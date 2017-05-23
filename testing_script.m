@@ -1,11 +1,3 @@
-% %% Attribute selection!
-% load read_source.mat;
-% [data, meta] = FeatureProcess.RemCorrelated(data,meta);
-% kwb = FeatureProcess.KruskalWallis(data,meta,10,0);
-% pcab = FeatureProcess.PCA(data,10,0);
-% ldab = FeatureProcess.LDA(data,10,0);
-
-
 %% Binary classification Kruskal + FisherLD
 load read_source.mat;
 [data, meta] = FeatureProcess.RemCorrelated(data,meta);
@@ -109,8 +101,8 @@ Classifier.KNearestNeighboors(kwm,1);
 %% Multiclass classification PCA + FisherLD
 load read_source.mat;
 [data, meta] = FeatureProcess.RemCorrelated(data, meta);
-pcab = FeatureProcess.PCA(data,3,0);
-Classifier.FisherLD(pcab,1);
+pcam = FeatureProcess.PCA(data,3,0);
+Classifier.FisherLD(pcam,1);
 
 %% Multiclass classification PCA + MinDistEuc
 load read_source.mat;

@@ -1,4 +1,4 @@
-function [ output_args ] = crossvalidation( data, classifier_name )
+function [ output_args ] = crossvalidation( data, n_classes, classifier_name )
 %CROSSVALIDATION
     % Cross validation test
 
@@ -11,7 +11,7 @@ function [ output_args ] = crossvalidation( data, classifier_name )
 
     xval = data;
     [itrn,itst] = crossval(n_data,n_folds);
-    final_matrix=zeros(2);
+    final_matrix=zeros(n_classes,n_classes);
 
     for i=1:n_folds
         xval.X_test = dataX(itst{1},:);
@@ -19,6 +19,8 @@ function [ output_args ] = crossvalidation( data, classifier_name )
         xval.X_train = dataX(itrn{1},:);
         xval.y_train = datay(:,itrn{1});
         [~,conf_matrix,v_error(i)] = classifier(xval,0);
+        final_matrix
+        conf_matrix
         final_matrix=final_matrix+conf_matrix;
     end
 
