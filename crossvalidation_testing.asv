@@ -30,5 +30,4 @@ crossvalidation(pcam , 6, 'Classifier.KNearestNeighboors');
 %% 
 crossvalidation(pcam , 6, 'Classifier.HybridClassifier');
 
-%%
-crossvalidation(data , 6, 'Classifier.DivideConquer');
+

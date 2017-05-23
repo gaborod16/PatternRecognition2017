@@ -164,4 +164,12 @@ Classifier.SupportVM(ldam,1);
 %% Multiclass classification PCA + Bayes
 load read_source.mat;
 [data, meta] = FeatureProcess.RemCorrelated(data, meta);
-Classifier.DivideConquer(data, 3, 'Classifier.Bayesian');
+Classifier.DivideConquer(data, 75, 'Classifier.Bayesian');
+
+%% nfeatures evolution
+accuracys=[];
+for i=1:100
+    [test_result, conf_matrix, error]=Classifier.DivideConquer(data, i, 'Classifier.Bayesian');
+    accuracys=[accuracys; i 1-error ];
+
+end 

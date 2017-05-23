@@ -18,7 +18,8 @@ function [ output_args ] = crossvalidation( data, n_classes, classifier_name )
         xval.y_test = datay(:,itst{1});
         xval.X_train = dataX(itrn{1},:);
         xval.y_train = datay(:,itrn{1});
-        [~,conf_matrix,v_error(i)] = classifier(xval,0);
+        %[~,conf_matrix,v_error(i)] = classifier(xval,0);
+        [~,conf_matrix,v_error(i)] = classifier(xval, 3, 'Classifier.Bayesian');
         final_matrix
         conf_matrix
         final_matrix=final_matrix+conf_matrix;
