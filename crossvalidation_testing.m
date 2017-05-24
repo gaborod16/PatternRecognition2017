@@ -27,7 +27,7 @@ crossvalidation(pcam , 6, 'Classifier.Bayesian');
 %% 
 crossvalidation(pcam , 6, 'Classifier.KNearestNeighboors');
 
-%% correr 
+%% 
 crossvalidation(pcam , 6, 'Classifier.HybridClassifier');
 
 %% 

@@ -131,6 +131,9 @@ elseif classifier=="knn"
     
 elseif classifier=="hybrid"
     [test_result,conf_matrix, error]=Classifier.HybridClassifier(features,1);
+
+elseif classifier=="divide"
+    [test_result, conf_matrix, error] = Classifier.DivideConquer(data, nfeatures, 'Classifier.Bayesian')
 end
 
 accuracy=1-error;
