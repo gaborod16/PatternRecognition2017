@@ -166,7 +166,7 @@ classdef FeatureProcess
                 in_data.y = data.y_train;
                 in_test_data.y = data.y_test;
             end
-            
+
             model = lda(in_data, n_wanted_features);
 
             out_data = linproj(in_data,model);

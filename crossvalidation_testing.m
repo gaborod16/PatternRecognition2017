@@ -29,3 +29,7 @@ crossvalidation(pcam , 6, 'Classifier.KNearestNeighboors');
 
 %% correr 
 crossvalidation(pcam , 6, 'Classifier.HybridClassifier');
+
+%% 
+% (data, n_features, classifier for divide and conquer)
+crossvalidation_dc(data, 75, 'Classifier.Bayesian');

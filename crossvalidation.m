@@ -1,4 +1,4 @@
-function [ output_args ] = crossvalidation( data, n_classes, classifier_name )
+function [ final_matrix ] = crossvalidation( data, n_classes, classifier_name )
 %CROSSVALIDATION
     % Cross validation test
 
